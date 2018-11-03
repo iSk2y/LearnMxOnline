@@ -15,6 +15,7 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0,os.path.join(BASE_DIR, 'apps'))
+sys.path.insert(0,os.path.join(BASE_DIR, 'extra_apps'))  # 这个我不加cmd也不报错好像！
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
@@ -40,7 +41,9 @@ INSTALLED_APPS = [
     'users',
     'courses',
     'organization',
-    'operation'
+    'operation',
+    'xadmin',
+    'crispy_forms'
 ]
 
 MIDDLEWARE = [
