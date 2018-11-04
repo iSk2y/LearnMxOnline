@@ -4,9 +4,23 @@
 
 
 import xadmin
-
+from xadmin import views
 
 from .models import EmailVerifyRecord, Banner
+
+
+#  Xadmin管理配置类
+class BaseSetting(object):
+    # 开启主题
+    enable_themes = True
+    use_bootswatch = True
+
+
+class GlobalSettings(object):
+    site_title = 'MxOnline'
+    site_footer = "MxOnline Platform"
+    # 收起菜单
+    menu_style = "accordion"
 
 
 class EmailVerifyRecordAdmin(object):
@@ -27,5 +41,7 @@ class BannerAdmin(object):
     list_filter = ['title', 'image', 'url', 'index', 'add_time']
 
 
+xadmin.site.register(views.BaseAdminView, BaseSetting)
+xadmin.site.register(views.CommAdminView, GlobalSettings)
 xadmin.site.register(EmailVerifyRecord, EmailVerifyRecordAdmin)
 xadmin.site.register(Banner, BannerAdmin)
