@@ -136,3 +136,8 @@ STATICFILES_DIRS = (
 
 
 AUTH_USER_MODEL = "users.UserProfile"
+
+# 自定义认证函数集
+AUTHENTICATION_BACKENDS = (
+    'users.views.CustomBackend',
+)
