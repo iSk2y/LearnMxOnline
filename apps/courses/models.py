@@ -1,6 +1,5 @@
 from datetime import datetime
 
-
 from django.db import models
 
 # Create your models here.
@@ -25,10 +24,14 @@ class Course(models.Model):
     image = models.ImageField(upload_to='courses/%Y/%m', verbose_name='封面图', max_length=100)
     click_nums = models.IntegerField(default=0, verbose_name='点击数')
     add_time = models.DateTimeField(default=datetime.now, verbose_name='添加时间')
+    degree = models.CharField(verbose_name='课程难度', choices=DEGREE_CHOICES, max_length=2, default='cj')
 
     class Meta:
         verbose_name = '课程'
         verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.name
 
 
 class Lesson(models.Model):  # 课程与章节是一对多关系
@@ -42,6 +45,9 @@ class Lesson(models.Model):  # 课程与章节是一对多关系
     class Meta:
         verbose_name = '章节'
         verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return "《{0}》章节>{1}".format(self.course, self.name)
 
 
 class Video(models.Model):  # 章节与视频是一对多关系
