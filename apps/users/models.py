@@ -53,7 +53,7 @@ class EmailVerifyRecord(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return "{0}({1})".format(self.code, self.email)
+        return self.email
 
 
 class Banner(models.Model):

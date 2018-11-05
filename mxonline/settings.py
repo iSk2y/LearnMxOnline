@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 import sys
 import os
-
+from users.email_conf import *
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0,os.path.join(BASE_DIR, 'apps'))
@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'organization',
     'operation',
     'xadmin',
-    'crispy_forms'
+    'crispy_forms',
+    'captcha'
 ]
 
 MIDDLEWARE = [
@@ -141,3 +142,6 @@ AUTH_USER_MODEL = "users.UserProfile"
 AUTHENTICATION_BACKENDS = (
     'users.views.CustomBackend',
 )
+
+# 配置mail选项
+
