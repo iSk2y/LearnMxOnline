@@ -6,7 +6,8 @@ Desktop.ini
 
 # PyCharm
 .idea
-
+# 邮箱配置
+apps/users/email_conf.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
