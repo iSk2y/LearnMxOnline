@@ -48,8 +48,13 @@ def send_mx_email(email, send_type='register'):
         email_title = '我的慕学网站 注册激活链接'
         email_body = '请点击下面的链接激活你的账号：http://127.0.0.1:8000/active/{0}'.format(code)
         # 使用Django内置函数完成邮件发送。四个参数：主题，邮件内容，从哪里发，接受者list
-        send_status = send_mail(email_title, email_body, EMAIL_FROM, [email])
-        if send_status:
-            return True
-        else:
-            return False
+
+    elif send_type == 'forget':
+        email_title = '我的慕学网站 密码找回链接'
+        email_body = '请点击下面的链接重置密码：http://127.0.0.1:8000/reset/{0}'.format(code)
+
+    send_status = send_mail(email_title, email_body, EMAIL_FROM, [email])
+    if send_status:
+        return True
+    else:
+        return False

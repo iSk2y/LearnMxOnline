@@ -18,7 +18,7 @@ from django.urls import path, include, re_path
 from django.views.generic import TemplateView
 
 import xadmin
-from users.views import LoginView, RegisterView, ActiveUserView
+from users.views import LoginView, RegisterView, ActiveUserView, ForgetPwdView, ResetView, ModifyPwdView
 
 urlpatterns = [
     path('xadmin/', xadmin.site.urls),
@@ -27,5 +27,11 @@ urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),
     # 自动生成验证码的url
     path('captcha/', include('captcha.urls')),
-    re_path('active/(?P<active_code>.*)/', ActiveUserView.as_view(), name='user_active')
+    # 注册激活url
+    re_path('active/(?P<active_code>.*)/', ActiveUserView.as_view(), name='user_active'),
+    path('forget/', ForgetPwdView.as_view(), name='forget_pwd'),
+    # 找回密码url
+    re_path('reset/(?P<reset_code>.*)/', ResetView.as_view(), name='reset_pwd'),
+    # 后台修改密码操作的url
+    path('modify_pwd/', ModifyPwdView.as_view(), name='modify_pwd')
 ]
