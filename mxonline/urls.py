@@ -21,7 +21,7 @@ from mxonline.settings import MEDIA_ROOT
 
 import xadmin
 from users.views import LoginView, RegisterView, ActiveUserView, ForgetPwdView, ResetView, ModifyPwdView
-from organization import views as orgviews
+
 
 urlpatterns = [
     path('xadmin/', xadmin.site.urls),
@@ -37,7 +37,7 @@ urlpatterns = [
     re_path('^reset/(?P<reset_code>.*)/', ResetView.as_view(), name='reset_pwd'),
     # 后台修改密码操作的url
     path('modify_pwd/', ModifyPwdView.as_view(), name='modify_pwd'),
-    path('org_list/', orgviews.OrgListView.as_view(), name='orglist'),
+    path('org/', include('organization.urls')),
     # 设置media访问url
     re_path(r'^media/(?P<path>.*)', serve, {"document_root": MEDIA_ROOT})
 ]

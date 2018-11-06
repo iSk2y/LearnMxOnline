@@ -1,7 +1,9 @@
 from django.shortcuts import render
+from django.http import JsonResponse, HttpResponse
 from django.views.generic.base import View
 from organization import models
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
+from organization import forms
 # Create your views here.
 
 
@@ -51,3 +53,17 @@ class OrgListView(View):
             'sort': sort
             }
         )
+
+
+class AddUserAskView(View):
+    """
+    我要学习模块
+    """
+    def post(self, request):
+        userask_form = forms.UserAskForm(request.POST)
+        if userask_form.is_valid():
+            # 如果验证通过 就存入数据库中
+            userask_form.save(commit=True)
+            return JsonResponse({"status": "success", "msg": "咨询成功，请等待回复"})
+        else:
+            return JsonResponse({"status": "fail", "msg": '咨询失败，稍后再试'})
