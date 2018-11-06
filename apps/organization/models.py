@@ -26,15 +26,21 @@ class CourseOrg(models.Model):
     """
     课程机构表，和城市多对一
     """
+    ORG_CHOICES = (
+        ('pxjg', '培训机构'),
+        ('gx', '高校'),
+        ('gr', '个人')
+    )
     name = models.CharField(max_length=50, verbose_name='机构名称')
-    desc = models.CharField(max_length=200, verbose_name='机构描述')
+    desc = models.TextField(verbose_name='机构描述')
     click_nums = models.IntegerField(default=0, verbose_name='点击数')
     add_time = models.DateTimeField(default=datetime.now, verbose_name='添加时间')
     fav_nums = models.IntegerField(default=0, verbose_name='收藏人数')
-    image = models.ImageField(upload_to='org/%Y/%m', verbose_name='封面图', max_length=100)
+    image = models.ImageField(upload_to='org/%Y/%m', verbose_name='LOGO', max_length=100)
     address = models.CharField(max_length=150, verbose_name='机构地址')
     # 一个城市可以有很多课程机构，通过将city设置为外键，变成机构的一个字段
     city = models.ForeignKey(to=CityDict, on_delete=models.CASCADE, verbose_name='所在城市')
+    category = models.CharField(verbose_name='机构类别', max_length=20, choices=ORG_CHOICES, default='pxjg')
 
     class Meta:
         verbose_name = '课程机构'

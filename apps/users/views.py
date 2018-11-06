@@ -159,3 +159,4 @@ class ModifyPwdView(View):
         else:
             reset_code = request.POST.get("reset_code")
             return render(request, 'password_reset.html', {'reset_code': reset_code, 'modifypwd_form':modifypwd_form})
+

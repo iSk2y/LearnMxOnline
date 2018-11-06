@@ -16,9 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include, re_path
 from django.views.generic import TemplateView
+from django.views.static import serve
+from mxonline.settings import MEDIA_ROOT
 
 import xadmin
 from users.views import LoginView, RegisterView, ActiveUserView, ForgetPwdView, ResetView, ModifyPwdView
+from organization import views as orgviews
 
 urlpatterns = [
     path('xadmin/', xadmin.site.urls),
@@ -31,7 +34,10 @@ urlpatterns = [
     re_path('active/(?P<active_code>.*)/', ActiveUserView.as_view(), name='user_active'),
     path('forget/', ForgetPwdView.as_view(), name='forget_pwd'),
     # 找回密码url
-    re_path('reset/(?P<reset_code>.*)/', ResetView.as_view(), name='reset_pwd'),
+    re_path('^reset/(?P<reset_code>.*)/', ResetView.as_view(), name='reset_pwd'),
     # 后台修改密码操作的url
-    path('modify_pwd/', ModifyPwdView.as_view(), name='modify_pwd')
+    path('modify_pwd/', ModifyPwdView.as_view(), name='modify_pwd'),
+    path('org_list/', orgviews.OrgListView.as_view(), name='orglist'),
+    # 设置media访问url
+    re_path(r'^media/(?P<path>.*)', serve, {"document_root": MEDIA_ROOT})
 ]
