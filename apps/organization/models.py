@@ -41,6 +41,8 @@ class CourseOrg(models.Model):
     # 一个城市可以有很多课程机构，通过将city设置为外键，变成机构的一个字段
     city = models.ForeignKey(to=CityDict, on_delete=models.CASCADE, verbose_name='所在城市')
     category = models.CharField(verbose_name='机构类别', max_length=20, choices=ORG_CHOICES, default='pxjg')
+    students = models.IntegerField(default=0, verbose_name=u"学习人数")
+    course_nums = models.IntegerField(default=0, verbose_name=u"课程数")
 
     class Meta:
         verbose_name = '课程机构'
