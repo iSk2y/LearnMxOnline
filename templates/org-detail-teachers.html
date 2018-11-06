@@ -1,0 +1,43 @@
+{% extends 'org-base.html' %}
+{% block title %}机构教师{% endblock %}
+
+{% block custom_bread %}
+<li><a href="{% url 'index' %}.html">首页</a>></li>
+<li><a href="{% url 'org:org_home' current_org.pk %}">课程机构</a></li>
+<li>机构教师</li>
+{% endblock %}
+
+{% block custom_right %}
+<div class="right companycenter layout" >
+    <div class="head">
+        <h1>机构教师</h1>
+        <a class="green fr more" href="org-detail-teachers.html">查看更多  >  </a>
+    </div>
+
+    <div class="diarys">
+        {% for teacher in all_teachers %}
+            <div class="module5 share company-diary-box" style="padding:10px 0;">
+                <div class="left">
+                    <img class="pic" src="{{ MEDIA_URL }}{{ teacher.image }}"/>
+                    <p>昵称：{{ teacher.name }}</p>
+                </div>
+                <div class="right">
+                    <div class="top">
+                        <div class="fl">
+                            <a href=""><h1>java开发教程</h1></a>
+                            <span>发表于：2015-10-12</span>
+                        </div>
+                    </div>
+                    <div class="middle" style="border-bottom:0;">课程介绍</div>
+                </div>
+            </div>
+        {% endfor %}
+
+
+    </div>
+
+
+
+</div>
+{% endblock %}
+

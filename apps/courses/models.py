@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from django.db import models
-
+from organization.models import CourseOrg
 # Create your models here.
 
 
@@ -19,6 +19,7 @@ class Course(models.Model):
     desc = models.CharField(max_length=300, verbose_name="课程描述")
     detail = models.TextField(verbose_name="课程详情")
     learn_times = models.IntegerField(default=0, verbose_name='学习时长（分钟）')  # 分钟为单位
+    course_org = models.ForeignKey(to=CourseOrg, verbose_name='所属机构', on_delete=models.CASCADE, null=True, blank=True)
     students = models.IntegerField(default=0, verbose_name='学习人数')
     fav_nums = models.IntegerField(default=0, verbose_name='收藏人数')
     image = models.ImageField(upload_to='courses/%Y/%m', verbose_name='封面图', max_length=100)

@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse, HttpResponse
 from django.views.generic.base import View
 from organization import models
@@ -67,3 +67,59 @@ class AddUserAskView(View):
             return JsonResponse({"status": "success", "msg": "咨询成功，请等待回复"})
         else:
             return JsonResponse({"status": "fail", "msg": '咨询失败，稍后再试'})
+
+
+class OrgHomeView(View):
+    """
+    机构首页
+    """
+    def get(self, request, org_id):
+        page_name = 'home'
+        course_org = get_object_or_404(models.CourseOrg, pk=int(org_id))
+        all_course = course_org.course_set.all()[:4]
+        all_teacher = course_org.teacher_set.all()[:2]
+
+        return render(request, 'org-detail-homepage.html',{
+            'all_courses': all_course,
+            'all_teachers': all_teacher,
+            'current_org': course_org,
+            'page_name': page_name
+        })
+
+
+class OrgCourseView(View):
+    """
+    机构课程页面
+    """
+    def get(self, request, org_id):
+        page_name = 'course'
+        course_org = get_object_or_404(models.CourseOrg, pk=int(org_id))
+        all_course = course_org.course_set.all()
+
+        return render(request, 'org-detail-course.html', {
+            'all_courses': all_course,
+            'current_org': course_org,
+            'page_name': page_name
+        })
+
+
+class OrgDescView(View):
+    def get(self, request, org_id):
+        page_name = 'desc'
+        course_org = get_object_or_404(models.CourseOrg, pk=int(org_id))
+        return render(request, 'org-detail-desc.html', {
+            'current_org': course_org,
+            'page_name': page_name
+        })
+
+
+class OrgTeacherView(View):
+    def get(self, request, org_id):
+        page_name = 'teacher'
+        course_org = get_object_or_404(models.CourseOrg, pk=int(org_id))
+        all_teacher = course_org.teacher_set.all()
+        return render(request, 'org-detail-teachers.html', {
+            'all_teachers': all_teacher,
+            'current_org': course_org,
+            'page_name': page_name
+        })
