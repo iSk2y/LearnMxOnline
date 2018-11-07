@@ -21,6 +21,8 @@ class Course(models.Model):
     learn_times = models.IntegerField(default=0, verbose_name='学习时长（分钟）')  # 分钟为单位
     course_org = models.ForeignKey(to=CourseOrg, verbose_name='所属机构', on_delete=models.CASCADE, null=True, blank=True)
     students = models.IntegerField(default=0, verbose_name='学习人数')
+    category = models.CharField(verbose_name='课程类别', max_length=20, default='编程开发')
+    tag = models.CharField(verbose_name='课程标签',default='', max_length=10)
     fav_nums = models.IntegerField(default=0, verbose_name='收藏人数')
     image = models.ImageField(upload_to='courses/%Y/%m', verbose_name='封面图', max_length=100)
     click_nums = models.IntegerField(default=0, verbose_name='点击数')
@@ -30,6 +32,20 @@ class Course(models.Model):
     class Meta:
         verbose_name = '课程'
         verbose_name_plural = verbose_name
+
+    def get_lesson_nums(self):
+        """
+        获取章节数
+        :return: int
+        """
+        return self.lesson_set.all().count()
+
+    def get_learn_user(self):
+        """
+        获取学习该课程的5个用户
+        :return: QurySet
+        """
+        return self.usercourse_set.all()[:5]
 
     def __str__(self):
         return self.name

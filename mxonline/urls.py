@@ -39,5 +39,6 @@ urlpatterns = [
     path('modify_pwd/', ModifyPwdView.as_view(), name='modify_pwd'),
     path('org/', include('organization.urls')),
     # 设置media访问url
-    re_path(r'^media/(?P<path>.*)', serve, {"document_root": MEDIA_ROOT})
+    re_path(r'^media/(?P<path>.*)', serve, {"document_root": MEDIA_ROOT}),
+    path('course/', include('courses.urls'))
 ]

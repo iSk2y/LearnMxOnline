@@ -5,7 +5,7 @@
 
 {% block custom_bread %}
 <li><a href="index.html">首页</a>></li>
-<li><a href="org-list.html">课程机构</a>></li>
+<li><a href="{% url 'org:org_list' %}">课程机构</a>></li>
 <li>机构首页</li>
 {% endblock %}
 
@@ -13,14 +13,14 @@
 <div class="right companycenter layout grouping" >
 		<div class="head">
 			<h1>全部课程</h1>
-			<a class="green fr more" href="org-detail-course.html">查看更多  >  </a>
+			<a class="green fr more" href="{% url 'org:org_course' current_org.id %}">查看更多  >  </a>
 		</div>
 		<div class="brief group_list">
             {% for course in all_courses %}
                  <div class="module1_5 box">
-                        <a href="course-detail.html"><img width="214" src="{{ MEDIA_URL }}{{ course.image }}"/></a>
+                        <a href="{% url 'course:detail' course.id %}"><img width="214" src="{{ MEDIA_URL }}{{ course.image }}"/></a>
                         <div class="des">
-                            <a href="course-detail.html"><h2>{{ course.name }}</h2></a>
+                            <a href="{% url 'course:detail' course.id %}"><h2>{{ course.name }}</h2></a>
                             <span class="fl">课时：<i class="key">{{ course.learn_times }}</i></span>
                             <span class="fr">参加人数：{{ course.students }}</span>
                         </div>
@@ -43,7 +43,7 @@
 <div class="right companycenter layout" >
     <div class="head">
         <h1>机构教师</h1>
-        <a class="green fr more" href="org-detail-teachers.html">查看更多  >  </a>
+        <a class="green fr more" href="{% url 'org:org_teacher' current_org.id %}">查看更多  >  </a>
     </div>
 
     <div class="diarys">
@@ -74,7 +74,7 @@
 <div class="right companycenter layout" >
     <div class="head">
         <h1>机构介绍</h1>
-        <a class="green fr more" href="org-detail-desc.html">查看更多  >  </a>
+        <a class="green fr more" href="{% url 'org:org_desc' current_org.id %}">查看更多  >  </a>
     </div>
     <div class="cont">
         {{ current_org.desc }}
