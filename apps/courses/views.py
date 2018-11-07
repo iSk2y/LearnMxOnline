@@ -1,8 +1,9 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, HttpResponse
 from courses import models
 from django.views.generic.base import View
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
-from operation.models import UserFavorite
+from operation.models import UserFavorite, CourseComments, UserCourse
+from utils.mixin_utils import LoginRequiredMixin
 # Create your views here.
 
 
@@ -67,4 +68,79 @@ class CourseDetailView(View):
             'relate_courses': relate_courses,
             'has_fav_course': has_fav_course,
             'has_fav_org': has_fav_org
+        })
+
+
+class CourseInfoView(LoginRequiredMixin, View):
+    """
+    课程信息视图
+    """
+    def get(self, request, course_id):
+        course = get_object_or_404(models.Course,id=course_id)
+        user_courses = UserCourse.objects.filter(user=request.user, course=course)
+        if not user_courses:
+            # 如果没有学习该门课程就关联起来
+            user_course = UserCourse(user=request.user, course=course)
+            user_course.save()
+        # 把这些都写在include tag里面了
+        # all_resources = models.CourseResource.objects.filter(course=course)
+        return render(request, 'course-video.html', {
+            'course': course,
+            # 'all_resources': all_resources # 把这些都写在include tag里面了
+        })
+
+
+class CommentsView(LoginRequiredMixin, View):
+    """
+    评论展示视图
+    """
+
+    def get(self, request, course_id):
+        course = models.Course.objects.get(id=int(course_id))
+        # all_resources = models.CourseResource.objects.filter(course=course) # 把这些都写在include tag里面了
+        all_comments = CourseComments.objects.all()
+        return render(request, "course-comment.html", {
+            "course": course,
+            # "all_resources": all_resources, # 把这些都写在include tag里面了
+            'all_comments': all_comments,
+        })
+
+
+class AddCommentsView(LoginRequiredMixin, View):
+    """
+    添加评论接口视图
+    """
+    def post(self, request):
+        if not request.user.is_authenticated:
+            # 未登录时返回json提示未登录，跳转到登录页面是在ajax中做的
+            return HttpResponse('{"status":"fail", "msg":"用户未登录"}', content_type='application/json')
+        course_id = request.POST.get("course_id", 0)
+        comments = request.POST.get("comments", "")
+        if int(course_id) > 0 and comments:
+            # 实例化一个course_comments对象
+            course_comments = CourseComments()
+            # 获取评论的是哪门课程
+            course = models.Course.objects.get(id = int(course_id))
+            # 分别把评论的课程、评论的内容和评论的用户保存到数据库
+            course_comments.course = course
+            course_comments.comments = comments
+            course_comments.user = request.user
+            course_comments.save()
+            return HttpResponse('{"status":"success", "msg":"评论成功"}', content_type='application/json')
+        else:
+            return HttpResponse('{"status":"fail", "msg":"评论失败"}', content_type='application/json')
+
+
+class VideoPlayView(LoginRequiredMixin, View):
+    """
+    视频播放页面
+    """
+    def get(self, request, video_id):
+        video = get_object_or_404(models.Video, pk=video_id)
+        # 通过外键找到章节再找到视频对应的课程
+        course = video.lesson.course
+        course.students += 1
+        course.save()
+        return render(request, 'course-play.html', {
+            'course': course
         })

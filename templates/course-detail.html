@@ -34,7 +34,7 @@
                             <li><span class="pram word3">课程类别：</span><span title="">{{ course.category }}</span></li>
 							<li class="piclist"><span class="pram word4">学习用户：</span>
                                 {% for usercourse in course.get_learn_user %}
-                                <span class="pic"><img width="40" height="40" src="/static/{{ usercourse.user.image }}"/></span>
+                                <span class="pic"><img width="40" height="40" src="{{ MEDIA_URL }}{{ usercourse.user.image }}"/></span>
 
                                 {% endfor %}
 
@@ -45,7 +45,7 @@
 							<div class="btn colectgroupbtn"  id="jsLeftBtn">
                                   {% if has_fav_course %}已收藏{% else %}收藏{% endif %}
                             </div>
-                                <div class="buy btn"><a style="color: white" href="course-video.html">开始学习</a></div>
+                                <div class="buy btn"><a style="color: white" href="{% url 'course:info' course.id %}">开始学习</a></div>
 						</div>
 					</div>
                     <div class="group-share-box">

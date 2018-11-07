@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from django.db import models
-from organization.models import CourseOrg
+from organization.models import CourseOrg,Teacher
 # Create your models here.
 
 
@@ -28,6 +28,9 @@ class Course(models.Model):
     click_nums = models.IntegerField(default=0, verbose_name='点击数')
     add_time = models.DateTimeField(default=datetime.now, verbose_name='添加时间')
     degree = models.CharField(verbose_name='课程难度', choices=DEGREE_CHOICES, max_length=2, default='cj')
+    teacher = models.ForeignKey(to=Teacher, verbose_name='讲师', null=True, blank=True, on_delete=models.CASCADE)
+    need_know = models.CharField(max_length=200, default='加油你能成功的！努力学习！摆脱困境', verbose_name='课程须知')
+    teacher_tell = models.CharField(max_length=200, default='你给我好好学，不要偷懒，滚去学习', verbose_name='老师告诉你')
 
     class Meta:
         verbose_name = '课程'
@@ -39,6 +42,13 @@ class Course(models.Model):
         :return: int
         """
         return self.lesson_set.all().count()
+
+    def get_course_lesson(self):
+        """
+        获取课程的章节
+        :return: QuerySet
+        """
+        return self.lesson_set.all()
 
     def get_learn_user(self):
         """
@@ -63,6 +73,13 @@ class Lesson(models.Model):  # 课程与章节是一对多关系
         verbose_name = '章节'
         verbose_name_plural = verbose_name
 
+    def get_lesson_vedio(self):
+        """
+        获取章节的视频
+        :return: QuerySet
+        """
+        return self.video_set.all()
+
     def __str__(self):
         return "《{0}》章节>{1}".format(self.course, self.name)
 
@@ -73,11 +90,16 @@ class Video(models.Model):  # 章节与视频是一对多关系
     """
     lesson = models.ForeignKey(to=Lesson, verbose_name='章节', on_delete=models.CASCADE)
     name = models.CharField(max_length=100, verbose_name='视频名')
+    url = models.CharField(max_length=200, default='', verbose_name='访问地址')
     add_time = models.DateTimeField(default=datetime.now, verbose_name='添加时间')
+    learn_times = models.IntegerField(default=0, verbose_name=u"学习时长(分钟数)")
 
     class Meta:
         verbose_name = '视频'
         verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.name
 
 
 class CourseResource(models.Model):
@@ -94,3 +116,5 @@ class CourseResource(models.Model):
         verbose_name = '课程资源'
         verbose_name_plural = verbose_name
 
+    def __str__(self):
+        return self.name
