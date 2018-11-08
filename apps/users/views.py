@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404, HttpResponse
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 # Create your views here.
 from django.contrib.auth.backends import ModelBackend
 from .models import UserProfile
@@ -67,7 +67,9 @@ class LoginView(View):
 
 class LoginOutView(View):
     def get(self, request):
-        pass
+        logout(request)
+        from django.urls import reverse
+        return redirect(reverse('index'))
 
 
 class RegisterView(View):

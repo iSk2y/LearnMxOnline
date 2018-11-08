@@ -88,6 +88,8 @@ class CourseInfoView(LoginRequiredMixin, View):
     """
     def get(self, request, course_id):
         course = get_object_or_404(models.Course,id=course_id)
+        course.students += 1
+        course.save()
         user_courses = UserCourse.objects.filter(user=request.user, course=course)
         if not user_courses:
             # 如果没有学习该门课程就关联起来

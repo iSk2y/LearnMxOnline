@@ -84,6 +84,9 @@ class OrgHomeView(View):
     def get(self, request, org_id):
         page_name = 'home'
         course_org = get_object_or_404(models.CourseOrg, pk=int(org_id))
+        course_org.click_nums += 1
+        course_org.save()
+
         all_course = course_org.course_set.all()[:4]
         all_teacher = course_org.teacher_set.all()[:2]
         # 判断收藏状态
@@ -263,6 +266,8 @@ class TeacherListView(View):
 class TeacherDetailView(View):
     def get(self, request, teacher_id):
         teacher = get_object_or_404(models.Teacher, id=teacher_id)
+        teacher.click_nums += 1
+        teacher.save()
         all_course = teacher.course_set.all()
         # 排行榜讲师
         rank_teacher = models.Teacher.objects.all().order_by("-fav_nums")[:5]
