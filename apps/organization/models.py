@@ -38,6 +38,7 @@ class CourseOrg(models.Model):
     fav_nums = models.IntegerField(default=0, verbose_name='收藏人数')
     image = models.ImageField(upload_to='org/%Y/%m', verbose_name='LOGO', max_length=100)
     address = models.CharField(max_length=150, verbose_name='机构地址')
+    tag = models.CharField('机构标签', max_length=10, default='全国知名')
     # 一个城市可以有很多课程机构，通过将city设置为外键，变成机构的一个字段
     city = models.ForeignKey(to=CityDict, on_delete=models.CASCADE, verbose_name='所在城市')
     category = models.CharField(verbose_name='机构类别', max_length=20, choices=ORG_CHOICES, default='pxjg')

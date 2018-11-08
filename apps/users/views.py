@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404, HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404, HttpResponse, render_to_response
 from django.contrib.auth import authenticate, login, logout
 # Create your views here.
 from django.contrib.auth.backends import ModelBackend
@@ -15,6 +15,27 @@ import json
 from operation import models as opmodel
 from courses.models import CourseOrg, Teacher, Course
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
+
+
+class IndexView(View):
+    """
+    首页
+    """
+    def get(self,request):
+        # 轮播图
+        all_banners = models.Banner.objects.all().order_by('index')
+        # 课程
+        courses = Course.objects.filter(is_banner=False)[:6]
+        # 轮播课程
+        banner_courses = Course.objects.filter(is_banner=True)[:3]
+        # 课程机构
+        course_orgs = Course.objects.all()[:15]
+        return render(request, 'index.html',{
+            'all_banners': all_banners,
+            'courses': courses,
+            'banner_courses': banner_courses,
+            'course_orgs': course_orgs,
+        })
 
 
 class CustomBackend(ModelBackend):
@@ -340,3 +361,18 @@ class MyMessageView(LoginRequiredMixin, View):
         return render(request, "usercenter-message.html", {
             "messages": messages,
         })
+
+
+def pag_not_found(request):
+    # 全局404处理函数
+    response = render_to_response('404.html', {})
+    response.status_code = 404
+    return response
+
+
+def page_error(request):
+    # 全局500处理函数
+    from django.shortcuts import render_to_response
+    response = render_to_response('500.html', {})
+    response.status_code = 500
+    return response

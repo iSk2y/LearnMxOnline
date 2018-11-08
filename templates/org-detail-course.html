@@ -2,7 +2,7 @@
 {% block title %}机构课程{% endblock %}
 
 {% block custom_bread %}
-<li><a href="{% url 'index' %}.html">首页</a>></li>
+<li><a href="{% url 'index' %}">首页</a>></li>
 <li><a href="{% url 'org:org_home' current_org.pk %}">课程机构</a></li>
 <li>机构课程</li>
 {% endblock %}
@@ -15,12 +15,12 @@
 		<div class="brief group_list">
             {% for course in all_courses %}
                 <div class="module1_5 box">
-                        <a class="comp-img-box" href="course-detail.html">
+                        <a class="comp-img-box" href="{% url 'course:detail' %}">
 
                             <img width="214" height="195" src="{{ MEDIA_URL }}{{ course.image }}">
                         </a>
                         <div class="des">
-                            <a href="course-detail.html"><h2>{{ course.name }}</h2></a>
+                            <a href="{% url 'course:detail' %}"><h2>{{ course.name }}</h2></a>
                             <span class="fl">课时：<i class="key">{{ course.learn_times }}</i></span>
                             <span class="fr">学习人数：{{ course.students }}</span>
                         </div>
