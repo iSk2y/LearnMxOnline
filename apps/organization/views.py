@@ -6,6 +6,7 @@ from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 from organization import forms
 from operation.models import UserFavorite
 from courses.models import Course, CourseOrg
+from django.db.models import Q
 # Create your views here.
 
 
@@ -13,7 +14,11 @@ class OrgListView(View):
     def get(self, request):
         org_list = models.CourseOrg.objects.all()
         citys_list = models.CityDict.objects.all()
-
+        search_keywords = request.GET.get('keywords', '')
+        if search_keywords:
+            # 在name字段进行操作,做like语句的操作。i代表不区分大小写
+            # or操作使用Q
+            org_list = org_list.filter(Q(name__icontains=search_keywords) | Q(desc__icontains=search_keywords))
         # city和category筛选
         try:  # 如果不是数字，肯定是非法字符了 直接给空吧
             city_id = int(request.GET.get("city", ""))
@@ -53,7 +58,7 @@ class OrgListView(View):
             'category': category_id,
             'hot_orgs': hot_orgs,
             'sort': sort,
-            'page_name': 'org_list'  # 给模板base 导航栏active的判断依据
+
             }
         )
 
@@ -220,6 +225,11 @@ class TeacherListView(View):
     """
     def get(self, request):
         all_teacher = models.Teacher.objects.all()
+        search_keywords = request.GET.get('keywords', '')
+        if search_keywords:
+            # 在name字段进行操作,做like语句的操作。i代表不区分大小写
+            # or操作使用Q
+            all_teacher = all_teacher.filter(name__icontains=search_keywords)
         # 总共有多少老师使用count进行统计
         teacher_nums = all_teacher.count()
         # 排序
@@ -246,7 +256,7 @@ class TeacherListView(View):
             "teacher_nums": teacher_nums,
             'sort': sort,
             'rank_teachers': rank_teacher,
-            'page_name': 'teacher_list' # 给模板base 导航栏active的判断依据
+
         })
 
 

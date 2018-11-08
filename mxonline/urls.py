@@ -20,7 +20,7 @@ from django.views.static import serve
 from mxonline.settings import MEDIA_ROOT
 
 import xadmin
-from users.views import LoginView, RegisterView, ActiveUserView, ForgetPwdView, ResetView, ModifyPwdView
+from users.views import LoginView, RegisterView, ActiveUserView, ForgetPwdView, ResetView, ModifyPwdView, LoginOutView
 
 
 urlpatterns = [
@@ -28,6 +28,7 @@ urlpatterns = [
     path('', TemplateView.as_view(template_name='index.html'), name='index'),
     path('login/', LoginView.as_view(), name='login'),
     path('register/', RegisterView.as_view(), name='register'),
+    path('logout/', LoginOutView.as_view(), name='logout'),
     # 自动生成验证码的url
     path('captcha/', include('captcha.urls')),
     # 注册激活url
@@ -40,5 +41,6 @@ urlpatterns = [
     path('org/', include('organization.urls')),
     # 设置media访问url
     re_path(r'^media/(?P<path>.*)', serve, {"document_root": MEDIA_ROOT}),
-    path('course/', include('courses.urls'))
+    path('course/', include('courses.urls')),
+    path('user/', include('users.urls'))
 ]

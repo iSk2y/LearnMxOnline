@@ -17,7 +17,7 @@ class UserProfile(AbstractUser):
         ('female', '女')
     )
     nick_name = models.CharField(max_length=50, verbose_name="昵称",default='')
-    birthday = models.DateTimeField(verbose_name='生日',null=True,blank=True) # blank是表单验证，null是数据库范畴
+    birthday = models.DateTimeField(verbose_name='生日', null=True,blank=True) # blank是表单验证，null是数据库范畴
     gender = models.CharField(max_length=6, verbose_name="性别", choices=GENDER_CHOICES, default='female')
     address = models.CharField(max_length=100, verbose_name="地址",default='')
     mobile = models.CharField(max_length=11, null=True, blank=True)
@@ -31,6 +31,10 @@ class UserProfile(AbstractUser):
         verbose_name = '用户信息'
         verbose_name_plural = verbose_name
 
+    def unread_nums(self):
+        from operation.models import UserMessage
+        return UserMessage.objects.filter(user=self.id).count()
+
     def __str__(self):
         return self.username
 
@@ -41,12 +45,13 @@ class EmailVerifyRecord(models.Model):
     """
     SEND_CHOICES = (
         ("register", "注册"),
-        ("forget", "找回密码")
+        ("forget", "找回密码"),
+        ('update', '修改邮箱')
     )
     code = models.CharField(max_length=20, verbose_name='验证码')
     email = models.EmailField(max_length=50, verbose_name='邮箱')
-    send_type = models.CharField(choices=SEND_CHOICES, max_length=10, verbose_name='发送类型')  # 发送类型
-    send_time = models.DateTimeField(default=datetime.now, verbose_name='发送时间') # 这里now()不能加括号,不去掉会根据编译时间。而不是根据实例化时间。
+    send_type = models.CharField(choices=SEND_CHOICES, max_length=30, verbose_name='发送类型')  # 发送类型
+    send_time = models.DateTimeField(default=datetime.now, verbose_name='发送时间')  # 这里now()不能加括号,不去掉会根据编译时间。而不是根据实例化时间。
 
     class Meta:
         verbose_name = '邮箱验证码'

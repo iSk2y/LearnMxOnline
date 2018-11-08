@@ -6,6 +6,7 @@ from django import forms
 
 from captcha.fields import CaptchaField
 from django.core.validators import ValidationError
+from users.models import UserProfile
 
 # 登陆表单简单验证,还可以自定义error 和modelForm搭配更好
 # 定义的字段和前端传入的要相同
@@ -73,3 +74,21 @@ class ModifyPwdForm(forms.Form):
         if pwd != re_pwd:
             raise ValidationError("两次密码不一样！！")
         return re_pwd
+
+
+class UploadImageForm(forms.ModelForm):
+    """
+    用户更改头像
+    """
+    class Meta:
+        model = UserProfile
+        fields = ['image']
+
+
+class UserInfoForm(forms.ModelForm):
+    """
+    个人中心信息修改
+    """
+    class Meta:
+        model = UserProfile
+        fields = ['nick_name', 'gender', 'birthday', 'address', 'mobile']
