@@ -3,7 +3,9 @@ from courses import models
 from django.views.generic.base import View
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 from operation.models import UserFavorite, CourseComments, UserCourse
+from organization.models import Teacher
 from utils.mixin_utils import LoginRequiredMixin
+
 # Create your views here.
 
 
@@ -34,7 +36,8 @@ class CourseListView(View):
         return render(request, 'course-list.html', {
             'all_course': courses,
             'sort': sort,
-            "hot_courses": hot_courses
+            "hot_courses": hot_courses,
+            'page_name': 'course_list' # 给base模板导航栏active的判断
         })
 
 
