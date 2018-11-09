@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'captcha',  # 验证码
     'pure_pagination',  # 第三方分页
+    'DjangoUeditor'
 ]
 
 MIDDLEWARE = [

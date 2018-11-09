@@ -6,13 +6,25 @@ from .models import Course,Lesson,CourseResource,Video
 import xadmin
 
 
+class LessonInline(object):
+    model = Lesson
+    extra = 0
+
+
+class CourseResourceInline(object):
+    model = CourseResource
+    extra = 0
+
+
 class CourseAdmin(object):
     """
     课程配置类
     """
-    list_display = ['name', 'desc', 'detail', 'learn_times', 'students', 'degree']
+    list_display = ['name', 'desc', 'learn_times', 'students', 'degree']
     search_fields = ['name', 'desc', 'detail', 'degree', 'students']
     list_filter = ['name', 'desc', 'detail', 'learn_times', 'students', 'degree']
+    inlines = [LessonInline, CourseResourceInline]
+    style_fields = {'detail': 'ueditor'}
 
 
 class LessonAdmin(object):

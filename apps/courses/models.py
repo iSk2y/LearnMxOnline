@@ -2,6 +2,7 @@ from datetime import datetime
 
 from django.db import models
 from organization.models import CourseOrg,Teacher
+from DjangoUeditor.models import UEditorField
 # Create your models here.
 
 
@@ -17,7 +18,8 @@ class Course(models.Model):
     )
     name = models.CharField(max_length=50, verbose_name="课程名")
     desc = models.CharField(max_length=300, verbose_name="课程描述")
-    detail = models.TextField(verbose_name="课程详情")
+    detail = UEditorField(verbose_name='课程详情', width=600, height=300, imagePath="courses/ueditor/",
+                          filePath="courses/ueditor/", default='')
     learn_times = models.IntegerField(default=0, verbose_name='学习时长（分钟）')  # 分钟为单位
     course_org = models.ForeignKey(to=CourseOrg, verbose_name='所属机构', on_delete=models.CASCADE, null=True, blank=True)
     students = models.IntegerField(default=0, verbose_name='学习人数')

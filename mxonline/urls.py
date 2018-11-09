@@ -45,6 +45,7 @@ urlpatterns = [
     path('course/', include('courses.urls')),
     path('user/', include('users.urls')),
     # re_path(r'^static/(?P<path>.*)', serve, {"document_root": STATIC_ROOT }),
+    path('ueditor/',include('DjangoUeditor.urls'))
 ]
 
 # 全局404页面配置
